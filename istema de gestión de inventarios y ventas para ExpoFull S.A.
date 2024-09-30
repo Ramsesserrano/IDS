@@ -1,0 +1,145 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Clase Producto que contiene información básica de los productos
+class Producto {
+public:
+    string nombre;
+    int stock;
+    double precio;
+
+    Producto(string _nombre, int _stock, double _precio) {
+        nombre = _nombre;
+        stock = _stock;
+        precio = _precio;
+    }
+
+    void mostrarProducto() {
+        cout << "Producto: " << nombre << ", Stock: " << stock << ", Precio: $" << precio << endl;
+    }
+
+    void venderProducto(int cantidad) {
+        if (cantidad <= stock) {
+            stock -= cantidad;
+            cout << "Venta realizada: " << cantidad << " unidades de " << nombre << endl;
+        } else {
+            cout << "Stock insuficiente para " << nombre << endl;
+        }
+    }
+
+    void agregarStock(int cantidad) {
+        stock += cantidad;
+        cout << "Stock actualizado para " << nombre << ": " << stock << " unidades." << endl;
+    }
+};
+
+// Clase Venta para registrar ventas realizadas
+class Venta {
+public:
+    string nombreProducto;
+    int cantidadVendida;
+    double totalVenta;
+
+    Venta(string _nombreProducto, int _cantidadVendida, double _totalVenta) {
+        nombreProducto = _nombreProducto;
+        cantidadVendida = _cantidadVendida;
+        totalVenta = _totalVenta;
+    }
+
+    void mostrarVenta() {
+        cout << "Venta - Producto: " << nombreProducto << ", Cantidad: " << cantidadVendida << ", Total: $" << totalVenta << endl;
+    }
+};
+
+// Función principal para simular el sistema de inventarios y ventas
+int main() {
+    vector<Producto> inventario;
+    vector<Venta> historialVentas;
+
+    // Agregar productos al inventario
+    inventario.push_back(Producto("Camisa", 50, 25.99));
+    inventario.push_back(Producto("Pantalón", 30, 45.50));
+    inventario.push_back(Producto("Zapatos", 20, 75.00));
+
+    int opcion;
+
+    do {
+        cout << "\n=== Sistema de Inventario y Ventas ExpoFull ===\n";
+        cout << "1. Mostrar Inventario\n";
+        cout << "2. Vender Producto\n";
+        cout << "3. Agregar Stock\n";
+        cout << "4. Mostrar Historial de Ventas\n";
+        cout << "5. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1:
+            // Mostrar todos los productos en inventario
+            cout << "\n=== Inventario ===\n";
+            for (int i = 0; i < inventario.size(); i++) {
+                inventario[i].mostrarProducto();
+            }
+            break;
+
+        case 2: {
+            // Vender producto
+            cout << "\nIngrese el número de producto a vender (0 = Camisa, 1 = Pantalón, 2 = Zapatos): ";
+            int productoIndex;
+            cin >> productoIndex;
+
+            if (productoIndex >= 0 && productoIndex < inventario.size()) {
+                cout << "Ingrese la cantidad a vender: ";
+                int cantidad;
+                cin >> cantidad;
+
+                double total = cantidad * inventario[productoIndex].precio;
+                inventario[productoIndex].venderProducto(cantidad);
+
+                // Registrar venta
+                historialVentas.push_back(Venta(inventario[productoIndex].nombre, cantidad, total));
+            } else {
+                cout << "Producto inválido.\n";
+            }
+            break;
+        }
+
+        case 3: {
+            // Agregar stock
+            cout << "\nIngrese el número de producto al cual agregar stock (0 = Camisa, 1 = Pantalón, 2 = Zapatos): ";
+            int productoIndex;
+            cin >> productoIndex;
+
+            if (productoIndex >= 0 && productoIndex < inventario.size()) {
+                cout << "Ingrese la cantidad de stock a agregar: ";
+                int cantidad;
+                cin >> cantidad;
+                inventario[productoIndex].agregarStock(cantidad);
+            } else {
+                cout << "Producto inválido.\n";
+            }
+            break;
+        }
+
+        case 4:
+            // Mostrar historial de ventas
+            cout << "\n=== Historial de Ventas ===\n";
+            for (int i = 0; i < historialVentas.size(); i++) {
+                historialVentas[i].mostrarVenta();
+            }
+            break;
+
+        case 5:
+            cout << "Saliendo del sistema...\n";
+            break;
+
+        default:
+            cout << "Opción no válida.\n";
+        }
+    } while (opcion != 5);
+
+    return 0;
+}
