@@ -1,0 +1,36 @@
+CREATE DATABASE ControlEmpleados;
+
+USE ControlEmpleados;
+
+CREATE TABLE CentrosTrabajo (
+    NumeroCentro INT PRIMARY KEY,
+    NombreCentro VARCHAR(100) NOT NULL,
+    Ciudad VARCHAR(50) NOT NULL
+);
+
+INSERT INTO CentrosTrabajo VALUES
+(201, 'Tiendas Ángel Flores Ropa', 'Culiacán'),
+(202, 'Tiendas Ángel Flores Muebles', 'Culiacán'),
+(203, 'Tiendas Ángel Flores Cajas', 'Culiacán'),
+(49001, 'La Primavera Ropa', 'Culiacán'),
+(49002, 'La Primavera Muebles', 'Culiacán'),
+(49003, 'La Primavera Cajas', 'Culiacán');
+
+CREATE TABLE Empleados (
+    NumeroEmpleado INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    ApellidoPaterno VARCHAR(50) NOT NULL,
+    ApellidoMaterno VARCHAR(50) NOT NULL,
+    FechaNacimiento DATE NOT NULL,
+    RFC VARCHAR(20) NOT NULL,
+    CentroTrabajo INT FOREIGN KEY REFERENCES CentrosTrabajo(NumeroCentro),
+    Puesto VARCHAR(50) NOT NULL,
+    DescripcionPuesto VARCHAR(100) NOT NULL,
+    EsDirectivo BIT NOT NULL
+);
+
+CREATE TABLE Directivos (
+    NumeroEmpleado INT PRIMARY KEY FOREIGN KEY REFERENCES Empleados(NumeroEmpleado),
+    NumeroCentroSupervisado INT NOT NULL,
+    PrestacionCombustible BIT NOT NULL
+);
