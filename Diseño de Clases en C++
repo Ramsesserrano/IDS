@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Empleado {
+protected:
+    int numeroEmpleado;
+    string nombre;
+    string apellidoPaterno;
+    string apellidoMaterno;
+    string fechaNacimiento;
+    string rfc;
+    string centroTrabajo;
+    string puesto;
+    string descripcionPuesto;
+    bool esDirectivo;
+
+public:
+    Empleado(int num, string nom, string apePat, string apeMat, string fechaNac, string centro, string puesto, string desc, bool directivo)
+        : numeroEmpleado(num), nombre(nom), apellidoPaterno(apePat), apellidoMaterno(apeMat), fechaNacimiento(fechaNac), centroTrabajo(centro), puesto(puesto), descripcionPuesto(desc), esDirectivo(directivo) {
+        generarRFC();
+    }
+
+    void generarRFC() {
+        rfc = apellidoPaterno.substr(0, 2) + apellidoMaterno.substr(0, 1) + nombre.substr(0, 1) + fechaNacimiento.substr(8, 2) + fechaNacimiento.substr(3, 2) + fechaNacimiento.substr(0, 2) + "XXX";
+    }
+
+    void imprimirInformacion() {
+        cout << "Número de Empleado: " << numeroEmpleado << endl;
+        cout << "Nombre: " << nombre << " " << apellidoPaterno << " " << apellidoMaterno << endl;
+        cout << "Fecha de Nacimiento: " << fechaNacimiento << endl;
+        cout << "RFC: " << rfc << endl;
+        cout << "Centro de Trabajo: " << centroTrabajo << endl;
+        cout << "Puesto: " << puesto << endl;
+        cout << "Descripción del Puesto: " << descripcionPuesto << endl;
+        cout << "¿Es Directivo?: " << (esDirectivo ? "Sí" : "No") << endl;
+    }
+};
