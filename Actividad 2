@@ -1,0 +1,68 @@
+// Actividad 2.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
+//
+
+#include <windows.h>
+#include <sql.h>
+#include <sqlext.h>
+#include <iostream>
+#include <iomanip>
+using namespace std;
+int main() {
+    SQLHENV hEnv;
+    SQLHDBC hDbc;
+    SQLRETURN ret;
+    // Asignar un gestor de entorno
+    ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv);
+    ret = SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0);
+    // Asignar un gestor de conexión
+    ret = SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc);
+    // Conectarse a la base de datos
+    ret = SQLConnect(hDbc, (SQLWCHAR*)L"sqlserver", SQL_NTS, (SQLWCHAR*)L"Username", SQL_NTS, (SQLWCHAR*)L"Password", SQL_NTS);
+    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+        cout << "Conectado a la base de datos exitosamente." << endl;
+        SQLHSTMT hStmt;
+        ret = SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt);
+        wcout << L"+----+--------+-------------+-------------+---------------+-----------+----------------------------+---------------------------+---------------------------------------+-----------+ " << endl;
+        wcout << L"| No.| Nombre | Ape-Paterno | Ape-Materno | FecNacimiento |    RFC    |     Centro de Trabajo      |          Puesto           | Descripcion del puesto                | Directivo | " << endl;
+        wcout << L"+----+--------+-------------+-------------+---------------+-----------+----------------------------+---------------------------+---------------------------------------+-----------+" << endl;
+        //Select a la base de datos
+        ret = SQLExecDirect(hStmt, (SQLWCHAR*)L"SELECT * FROM Empleados3", SQL_NTS);
+        if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            int num_empleado;
+            SQLWCHAR name[50];
+            SQLWCHAR Apellido_Paterno[50];
+            SQLWCHAR Apellido_Materno[50];
+            SQLWCHAR Fecha_Nacimiento[50];
+            SQLWCHAR RFC[12];
+            SQLWCHAR Centro_Trabajo[30];
+            SQLWCHAR Puesto[30];
+            SQLWCHAR Descripcion_Puesto[38];
+            BOOL Directivo;
+
+            while (SQLFetch(hStmt) == SQL_SUCCESS) {
+                SQLGetData(hStmt, 1, SQL_C_LONG, &num_empleado, 0, NULL);
+                SQLGetData(hStmt, 2, SQL_C_WCHAR, name, sizeof(name), NULL);
+                SQLGetData(hStmt, 3, SQL_C_WCHAR, Apellido_Paterno, sizeof(Apellido_Paterno), NULL);
+                SQLGetData(hStmt, 4, SQL_C_WCHAR, Apellido_Materno, sizeof(Apellido_Materno), NULL);
+                SQLGetData(hStmt, 5, SQL_C_WCHAR, Fecha_Nacimiento, sizeof(Fecha_Nacimiento), NULL);
+                SQLGetData(hStmt, 6, SQL_C_WCHAR, RFC, sizeof(RFC), NULL);
+                SQLGetData(hStmt, 7, SQL_C_WCHAR, Centro_Trabajo, sizeof(Centro_Trabajo), NULL);
+                SQLGetData(hStmt, 8, SQL_C_WCHAR, Puesto, sizeof(Puesto), NULL);
+                SQLGetData(hStmt, 9, SQL_C_WCHAR, Descripcion_Puesto, sizeof(Descripcion_Puesto), NULL);
+                SQLGetData(hStmt, 10, SQL_C_LONG, &Directivo, 0, NULL);
+               wcout << "  " << num_empleado << "    " << name << "    " << Apellido_Paterno << "     " << Apellido_Materno << "  " << Fecha_Nacimiento << "    " << RFC << " " << Centro_Trabajo << "  " << Puesto << " " << Descripcion_Puesto << "       " << Directivo << endl;
+            }
+            /* wcout << L"+------+--------------------------------+" << endl;*/
+        }
+        // Liberar el manejador de conexión
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+    else {
+        cout << "Fallo la conexion a la base de datos" << endl;
+    }
+    // Desconectar y liberar gestores de entorno
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    return 0;
+}
