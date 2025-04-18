@@ -1,0 +1,72 @@
+namespace Actividad_uno
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Aplicación de consola integrada (puede ejecutarse desde un proyecto Windows Forms)
+            Console.WriteLine("Bienvenidos a UMI/Universidad Coppel");
+
+            Console.Write("Nombre completo: ");
+            string nombre = Console.ReadLine();
+
+            Console.Write("Edad: ");
+            string edad = Console.ReadLine();
+
+            Console.Write("Fecha de nacimiento (dd/mm/aaaa): ");
+            string fechaNacimiento = Console.ReadLine();
+
+            Console.Write("Carrera a la que desea ingresar: ");
+            string carrera = Console.ReadLine();
+
+            Console.WriteLine($"\nGracias {nombre} por formar parte de UMI/Universidad Coppel, Bienvenido a la carrera {carrera}\n");
+
+            Console.WriteLine("--- Datos del Aspirante ---");
+            Console.WriteLine($"Nombre: {nombre}");
+            Console.WriteLine($"Edad: {edad}");
+            Console.WriteLine($"Fecha de nacimiento: {fechaNacimiento}");
+            Console.WriteLine($"Carrera: {carrera}");
+
+            Console.WriteLine("\nPresiona una tecla para continuar...");
+            Console.ReadKey();
+        }
+    }
+}   
+// Parte II: Formulario Windows Forms (Form1.cs)
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Actividad_numero_1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            listBox1.Items.AddRange(new string[] {
+                "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas", "Chihuahua", "Coahuila", "Colima", "CDMX",
+"Durango", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "México", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas"
+            });
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            string nombre = txtNombre.Text;
+            string nacimiento = txtNacimiento.Text;
+            string direccion = txtDireccion.Text;
+            string estado = listBox1.SelectedItem?.ToString() ?? "No seleccionado";
+            string horario = radioMatutino.Checked ? "Matutino" : radioVespertino.Checked ? "Vespertino" : "No seleccionado";
+
+            MessageBox.Show($"Nombre: {nombre}\nFecha de nacimiento: {nacimiento}\nDirección: {direccion}\nEstado: {estado}\nHorario: {horario}",
+                "Expediente guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+    }
+}
