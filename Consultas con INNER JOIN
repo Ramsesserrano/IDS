@@ -1,0 +1,32 @@
+SELECT 
+    p.Descripción AS Producto, 
+    p.Precio, 
+    m.Descripcion AS Marca,        
+    c.Descripcion AS Categoria
+FROM Productos p
+INNER JOIN Marcas m ON p.IdMarca = m.Id
+INNER JOIN Categorias c ON p.IdCategoria = c.Id;
+
+SELECT 
+    car.FolioVenta, 
+    car.Estatus, 
+    p.Descripción AS Producto, 
+    det.Cantidad, 
+    det.Subtotal
+FROM Carrito car
+INNER JOIN CarritoDetalle det ON car.Id = det.IdCarrito
+INNER JOIN Productos p ON det.IdProducto = p.Id;
+
+SELECT 
+    car.FolioVenta, 
+    car.Fecha,
+    p.Descripción AS Producto, 
+    m.Descripcion AS Marca, 
+    c.Descripcion AS Categoria,
+    det.Cantidad, 
+    det.Subtotal
+FROM Carrito car
+INNER JOIN CarritoDetalle det ON car.Id = det.IdCarrito
+INNER JOIN Productos p ON det.IdProducto = p.Id
+INNER JOIN Marcas m ON p.IdMarca = m.Id
+INNER JOIN Categorias c ON p.IdCategoria = c.Id;
