@@ -1,0 +1,96 @@
+-- 1. Insertar Categorias
+INSERT INTO Categorias (Descripcion) VALUES ('Electrónica');
+INSERT INTO Categorias (Descripcion) VALUES ('Ropa');
+INSERT INTO Categorias (Descripcion) VALUES ('Hogar');
+INSERT INTO Categorias (Descripcion) VALUES ('Juguetes');
+INSERT INTO Categorias (Descripcion) VALUES ('Deportes');
+
+-- 2. Insertar Marcas
+INSERT INTO Marcas (Descripcion) VALUES ('Sony'); 
+INSERT INTO Marcas (Descripcion) VALUES ('Nike');
+INSERT INTO Marcas (Descripcion) VALUES ('Samsung');
+INSERT INTO Marcas (Descripcion) VALUES ('Adidas');
+INSERT INTO Marcas (Descripcion) VALUES ('LG');
+
+-- 3. Insertar Productos (Asegúrate que los IDs de categoria y marca existan arriba)
+INSERT INTO Productos (Descripción, Precio, Cantidad, IdCategoria, IdMarca) VALUES 
+('TV 50 Pulgadas', 8000, 10, 1, 3), 
+('Camiseta Running', 500, 50, 2, 2),
+('Lavadora', 12000, 5, 3, 5),
+('Pelota Futbol', 300, 100, 5, 4),
+('Audifonos', 1500, 20, 1, 1);
+
+-- 4. Insertar Carrito
+INSERT INTO Carrito (FolioVenta, TotalCompra, Estatus, Fecha) VALUES 
+(1001, 8500, 'Pagado', GETDATE()),
+(1002, 500, 'Pendiente', GETDATE()),
+(1003, 12000, 'Enviado', GETDATE()),
+(1004, 300, 'Pagado', GETDATE()),
+(1005, 1500, 'Cancelado', GETDATE());
+
+DROP TABLE Carrito;
+
+
+CREATE TABLE Carrito (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FolioVenta INT NOT NULL, -- .
+    TotalCompra DECIMAL(18,2) NOT NULL,
+    Estatus VARCHAR(50) NOT NULL, -- 
+    Fecha DATE DEFAULT GETDATE()
+);
+
+DROP TABLE IF EXISTS CarritoDetalle;
+
+DROP TABLE IF EXISTS Carrito;
+
+CREATE TABLE Carrito (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FolioVenta INT NOT NULL,
+    TotalCompra DECIMAL(18,2) NOT NULL,
+    Estatus VARCHAR(50) NOT NULL, -- ¡Aquí estaba el problema! Ahora acepta texto.
+    Fecha DATE DEFAULT GETDATE()
+);
+
+CREATE TABLE CarritoDetalle (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdCarrito INT,
+    IdProducto INT,
+    Cantidad INT,
+    Subtotal DECIMAL(18,2),
+    FOREIGN KEY (IdCarrito) REFERENCES Carrito(Id),
+    FOREIGN KEY (IdProducto) REFERENCES Productos(Id)
+);
+
+-- 1. Insertar Categorias
+INSERT INTO Categorias (Descripcion) VALUES ('Electrónica');
+INSERT INTO Categorias (Descripcion) VALUES ('Ropa');
+INSERT INTO Categorias (Descripcion) VALUES ('Hogar');
+INSERT INTO Categorias (Descripcion) VALUES ('Juguetes');
+INSERT INTO Categorias (Descripcion) VALUES ('Deportes');
+-- 2. Insertar Marcas
+INSERT INTO Marcas (Descripcion) VALUES ('Sony'); 
+INSERT INTO Marcas (Descripcion) VALUES ('Nike');
+INSERT INTO Marcas (Descripcion) VALUES ('Samsung');
+INSERT INTO Marcas (Descripcion) VALUES ('Adidas');
+INSERT INTO Marcas (Descripcion) VALUES ('LG');
+-- 3. Insertar Productos 
+INSERT INTO Productos (Descripción, Precio, Cantidad, IdCategoria, IdMarca) VALUES 
+('TV 50 Pulgadas', 8000, 10, 1, 3), 
+('Camiseta Running', 500, 50, 2, 2),
+('Lavadora', 12000, 5, 3, 5),
+('Pelota Futbol', 300, 100, 5, 4),
+('Audifonos', 1500, 20, 1, 1);
+-- 4. Insertar Carrito
+INSERT INTO Carrito (FolioVenta, TotalCompra, Estatus, Fecha) VALUES 
+(1001, 8500, 'Pagado', GETDATE()),
+(1002, 500, 'Pendiente', GETDATE()),
+(1003, 12000, 'Enviado', GETDATE()),
+(1004, 300, 'Pagado', GETDATE()),
+(1005, 1500, 'Cancelado', GETDATE());
+-- 5. Insertar CarritoDetalle
+INSERT INTO CarritoDetalle (IdCarrito, IdProducto, Cantidad, Subtotal) VALUES
+(1, 1, 1, 8000), -- Carrito 1 (ID auto), Producto 1
+(2, 2, 1, 500),
+(3, 3, 1, 12000),
+(4, 4, 1, 300),
+(5, 5, 1, 1500);
